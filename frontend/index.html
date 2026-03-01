@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Weekly Life Planner</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0d0d0d;
@@ -12,8 +12,8 @@
     --border: #2a2a2a;
     --accent: #c8ff00;
     --accent2: #ff6b35;
-    --text: #f0f0f0;
-    --muted: #666;
+    --text: #f5f5f5;
+    --muted: #888;
     --done-bg: #1a1a1a;
   }
 
@@ -22,8 +22,10 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'Syne', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     min-height: 100vh;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
 
   /* ---- LOGIN ---- */
@@ -78,10 +80,11 @@
   }
 
   .login-title {
-    font-size: 38px;
-    font-weight: 800;
-    letter-spacing: -1.5px;
-    line-height: 1;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    font-family: 'DM Serif Display', serif;
     margin-bottom: 6px;
   }
 
@@ -135,7 +138,7 @@
     border: none;
     border-radius: 12px;
     padding: 16px;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 15px;
     font-weight: 800;
     letter-spacing: 1px;
@@ -193,14 +196,15 @@
   .hero-eyebrow {
     font-family: 'Space Mono', monospace;
     font-size: 10px;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    opacity: 0.85;
   }
 
-  h1 { font-size: clamp(32px, 5vw, 48px); font-weight: 800; letter-spacing: -2px; line-height: 1; }
-  h1 span { color: var(--accent); }
+  h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 700; letter-spacing: -1px; line-height: 1.1; font-family: 'DM Serif Display', serif; }
+  h1 span { color: var(--accent); font-style: italic; }
 
   .logout-btn {
     font-family: 'Space Mono', monospace;
@@ -217,6 +221,53 @@
   }
 
   .logout-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+
+  .quote-bar {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quote-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: var(--muted);
+    font-style: italic;
+    letter-spacing: 0.2px;
+    transition: opacity 0.6s ease;
+  }
+
+  .quote-text span {
+    color: var(--accent);
+    font-style: normal;
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+    margin-left: 10px;
+    letter-spacing: 1px;
+    opacity: 0.7;
+  }
+
+  .quote-refresh {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--border);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+
+  .quote-refresh:hover { color: var(--accent); }
+  .quote-fade { opacity: 0; }
 
   /* WEEK NAV */
   .week-nav-bar {
@@ -305,7 +356,7 @@
   }
 
   .day-tab.active .day-name { color: var(--accent); }
-  .day-date { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+  .day-date { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
   .day-tab.active .day-date { color: var(--accent); }
 
   .day-dots { display: flex; gap: 2px; justify-content: center; margin-top: 4px; }
@@ -337,7 +388,7 @@
   .ov-card.is-today { border-color: var(--accent2); }
 
   .ov-day { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-  .ov-num { font-size: 18px; font-weight: 800; }
+  .ov-num { font-size: 18px; font-weight: 600; }
   .ov-bar-track { height: 3px; background: var(--border); border-radius: 999px; margin-top: 6px; overflow: hidden; }
   .ov-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 999px; transition: width 0.4s ease; }
 
@@ -350,7 +401,7 @@
     gap: 12px;
   }
 
-  .day-title { font-size: clamp(22px, 4vw, 34px); font-weight: 800; letter-spacing: -1px; }
+  .day-title { font-size: clamp(20px, 4vw, 32px); font-weight: 600; letter-spacing: -0.3px; font-family: 'DM Serif Display', serif; }
 
   .today-badge {
     display: inline-block;
@@ -366,7 +417,7 @@
     margin-left: 10px;
   }
 
-  .progress-text { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); }
+  .progress-text { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent); letter-spacing: 0.5px; }
 
   .progress-bar-track { height: 5px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 28px; }
   .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 999px; transition: width 0.5s cubic-bezier(.25,.8,.25,1); }
@@ -399,7 +450,7 @@
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 14px 18px;
-    font-family: 'Syne', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 15px;
     color: var(--text);
     outline: none;
@@ -430,7 +481,7 @@
     border-radius: 12px;
     padding: 14px 22px;
     font-size: 22px;
-    font-weight: 700;
+    font-weight: 500;
     cursor: pointer;
     transition: transform 0.15s, background 0.2s;
     line-height: 1;
@@ -478,18 +529,19 @@
   .task-item.done .task-checkbox { background: var(--accent); border-color: var(--accent); color: #000; }
 
   .task-body { flex: 1; min-width: 0; }
-  .task-text { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.4; }
-  .task-item.done .task-text { text-decoration: line-through; color: var(--muted); font-weight: 400; }
+  .task-text { font-size: 15px; font-weight: 500; letter-spacing: 0px; line-height: 1.5; }
+  .task-item.done .task-text { text-decoration: line-through; color: var(--muted); font-weight: 300; }
 
   .task-cat {
     font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 1.2px;
+    font-size: 11px;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    margin-top: 4px;
+    margin-top: 5px;
     display: flex;
     align-items: center;
     gap: 5px;
+    opacity: 0.9;
   }
 
   .cat-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
@@ -561,6 +613,205 @@
     .week-overview { gap: 4px; }
     .ov-num { font-size: 14px; }
   }
+
+  /* ---- FUTURE PLANS ---- */
+  .future-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 40px;
+  }
+
+  .future-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .future-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .future-title {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    font-family: 'DM Serif Display', serif;
+  }
+
+  .future-title span { color: var(--accent2); }
+
+  .future-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 6px;
+  }
+
+  .future-add {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .future-input {
+    flex: 1;
+    min-width: 180px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .future-input:focus { border-color: var(--accent2); }
+  .future-input::placeholder { color: var(--muted); }
+
+  .future-date-input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    color-scheme: dark;
+  }
+
+  .future-date-input:focus { border-color: var(--accent2); }
+
+  .future-cat-select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .future-cat-select option { background: var(--surface); }
+
+  .future-add-btn {
+    background: var(--accent2);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 22px;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s;
+    line-height: 1;
+  }
+
+  .future-add-btn:hover { background: #ff8555; transform: scale(1.05); }
+  .future-add-btn:active { transform: scale(0.95); }
+
+  .future-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .future-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.25s ease;
+    animation: slideIn 0.3s ease;
+  }
+
+  .future-item:hover { border-color: #3a3a3a; }
+  .future-item.done { opacity: 0.5; }
+  .future-item.done .task-text { text-decoration: line-through; color: var(--muted); font-weight: 400; }
+
+  .future-date-col {
+    flex-shrink: 0;
+    text-align: right;
+    min-width: 90px;
+  }
+
+  .future-date-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+  }
+
+  .future-days-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 3px;
+    letter-spacing: 1px;
+  }
+
+  .future-task-checkbox {
+    width: 24px; height: 24px;
+    border: 2px solid var(--border);
+    border-radius: 7px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+
+  .future-task-checkbox:hover { border-color: var(--accent2); }
+  .future-item.done .future-task-checkbox { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+
+  .future-jump-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px 8px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .future-jump-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .future-empty {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .future-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  @media (max-width: 600px) {
+    .future-section { padding: 28px 16px; }
+    .future-date-col { min-width: 70px; }
+  }
+
 </style>
 </head>
 <body>
@@ -623,6 +874,24 @@
       <div class="empty-icon">🌿</div>
       No tasks here. Add something meaningful!
     </div>
+
+<div class="future-divider"></div>
+<div class="future-section" id="futureSection" style="display:none">
+  <div class="future-inner">
+    <div class="future-eyebrow">Looking ahead</div>
+    <div class="future-title">Future <span>Plans.</span></div>
+
+    <div class="future-add" style="margin-top:20px">
+      <input class="future-input" id="futureInput" type="text" placeholder="What are you planning for the future?" maxlength="140">
+      <input class="future-date-input" id="futureDatePicker" type="date">
+      <select class="future-cat-select" id="futureCatSelect"></select>
+      <button class="future-add-btn" id="futureAddBtn" title="Add future plan">+</button>
+    </div>
+
+    <div class="future-list" id="futureList"></div>
+  </div>
+</div>
+
   </div>
 </div>
 
@@ -707,6 +976,7 @@
     document.getElementById('appScreen').style.display = 'block';
     buildCatSelect();
     attachEvents();
+    initFutureSection();
     loadAndRender();
   }
 
@@ -951,6 +1221,137 @@
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 2500);
   }
+
+  // ---- FUTURE PLANS ----
+  function loadFuturePlans() {
+    return JSON.parse(localStorage.getItem('wplanner_future') || '[]');
+  }
+
+  function saveFuturePlans(plans) {
+    localStorage.setItem('wplanner_future', JSON.stringify(plans));
+  }
+
+  function renderFuturePlans() {
+    const plans = loadFuturePlans();
+    const list = document.getElementById('futureList');
+    list.innerHTML = '';
+
+    if (plans.length === 0) {
+      list.innerHTML = '<div class="future-empty">No future plans yet — start dreaming big! 🚀</div>';
+      return;
+    }
+
+    plans.sort((a, b) => a.date.localeCompare(b.date));
+
+    plans.forEach(plan => {
+      const cat = CATS.find(c => c.id === plan.cat) || CATS[0];
+      const dateObj = new Date(plan.date + 'T00:00:00');
+      const formattedDate = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      const daysFromNow = Math.ceil((dateObj - todayRaw) / (1000 * 60 * 60 * 24));
+      const daysLabel = daysFromNow === 0 ? 'Today' : daysFromNow === 1 ? 'Tomorrow' : daysFromNow < 0 ? Math.abs(daysFromNow) + 'd ago' : 'in ' + daysFromNow + 'd';
+
+      const item = document.createElement('div');
+      item.className = 'future-item' + (plan.done ? ' done' : '');
+      item.innerHTML = `
+        <div class="future-date-col">
+          <div class="future-date-label">${formattedDate}</div>
+          <div class="future-days-badge" style="color:${daysFromNow < 0 ? 'var(--muted)' : daysFromNow <= 7 ? 'var(--accent2)' : 'var(--accent)'}">${daysLabel}</div>
+        </div>
+        <div class="future-task-checkbox" data-id="${plan.id}">${plan.done ? '✓' : ''}</div>
+        <div class="task-body">
+          <div class="task-text">${escHtml(plan.text)}</div>
+          <div class="task-cat" style="color:${cat.color}"><span class="cat-dot" style="background:${cat.color}"></span>${cat.emoji} ${cat.label}</div>
+        </div>
+        <button class="future-jump-btn" data-date="${plan.date}" title="Jump to this week">↗</button>
+        <button class="delete-btn" data-id="${plan.id}" data-future="1">✕</button>
+      `;
+      list.appendChild(item);
+    });
+
+    list.querySelectorAll('.future-task-checkbox').forEach(el =>
+      el.addEventListener('click', () => toggleFuturePlan(el.dataset.id)));
+    list.querySelectorAll('.delete-btn[data-future]').forEach(el =>
+      el.addEventListener('click', () => deleteFuturePlan(el.dataset.id)));
+    list.querySelectorAll('.future-jump-btn').forEach(el =>
+      el.addEventListener('click', () => jumpToDate(el.dataset.date)));
+  }
+
+  function addFuturePlan() {
+    const text = document.getElementById('futureInput').value.trim();
+    const date = document.getElementById('futureDatePicker').value;
+    const cat = document.getElementById('futureCatSelect').value;
+    if (!text || !date) { showToast('Fill in both task and date!'); return; }
+    const plans = loadFuturePlans();
+    plans.push({ id: uid(), text, date, cat, done: false });
+    saveFuturePlans(plans);
+    document.getElementById('futureInput').value = '';
+    document.getElementById('futureDatePicker').value = '';
+    renderFuturePlans();
+    showToast('Future plan added ✓');
+  }
+
+  function toggleFuturePlan(id) {
+    const plans = loadFuturePlans();
+    const p = plans.find(p => p.id === id);
+    if (p) { p.done = !p.done; saveFuturePlans(plans); renderFuturePlans(); }
+  }
+
+  function deleteFuturePlan(id) {
+    saveFuturePlans(loadFuturePlans().filter(p => p.id !== id));
+    renderFuturePlans();
+    showToast('Plan removed');
+  }
+
+  function jumpToDate(dateStr) {
+    const target = new Date(dateStr + 'T00:00:00');
+    target.setHours(0,0,0,0);
+    const targetMonday = getMonday(target);
+    const currentMonday = getMonday(todayRaw);
+    weekOffset = Math.round((targetMonday - currentMonday) / (7 * 24 * 60 * 60 * 1000));
+    selectedDay = target;
+    catFilter = 'all';
+    loadAndRender();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast('Jumped to ' + target.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+  }
+
+  function initFutureSection() {
+    // Build cat select for future
+    const sel = document.getElementById('futureCatSelect');
+    sel.innerHTML = '';
+    CATS.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.emoji + ' ' + c.label;
+      sel.appendChild(opt);
+    });
+
+    // Set min date to today
+    const todayStr = dateKey(todayRaw);
+    document.getElementById('futureDatePicker').min = todayStr;
+
+    document.getElementById('futureAddBtn').addEventListener('click', addFuturePlan);
+    document.getElementById('futureInput').addEventListener('keydown', e => { if (e.key === 'Enter') addFuturePlan(); });
+
+    document.getElementById('futureSection').style.display = 'block';
+    renderFuturePlans();
+  }
+
+
+  function initQuotes() {
+    currentQuoteIdx = Math.floor(Math.random() * QUOTES.length);
+    showQuote(currentQuoteIdx);
+    document.getElementById('quoteRefresh').addEventListener('click', () => {
+      currentQuoteIdx = (currentQuoteIdx + 1 + Math.floor(Math.random() * (QUOTES.length - 1))) % QUOTES.length;
+      showQuote(currentQuoteIdx);
+    });
+    // Auto rotate every 30 seconds
+    setInterval(() => {
+      currentQuoteIdx = (currentQuoteIdx + 1) % QUOTES.length;
+      showQuote(currentQuoteIdx);
+    }, 30000);
+  }
+
 </script>
 </body>
 </html>
