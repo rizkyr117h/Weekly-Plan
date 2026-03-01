@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: weekly-planner
+    ports:
+      - "4500:4500"
+    volumes:
+      - planner-data:/data
+    environment:
+      - PORT=4500
+      - APP_PASSWORD=rizkyr117h
+      - JWT_SECRET=change-this-to-a-long-random-string-in-production
+    restart: unless-stopped
+
+volumes:
+  planner-data:
+    driver: local

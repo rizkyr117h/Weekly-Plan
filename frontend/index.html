@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Life Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --accent: #c8ff00;
+    --accent2: #ff6b35;
+    --text: #f0f0f0;
+    --muted: #666;
+    --done-bg: #1a1a1a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ---- LOGIN ---- */
+  #loginScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #loginScreen::before {
+    content: '';
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,255,0,0.06) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+
+  #loginScreen::after {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,53,0.06) 0%, transparent 70%);
+    bottom: -60px; left: -60px;
+    pointer-events: none;
+  }
+
+  .login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .login-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .login-title {
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .login-title span { color: var(--accent); }
+
+  .login-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 36px;
+  }
+
+  .login-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .login-input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    color: var(--text);
+    outline: none;
+    letter-spacing: 4px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 16px;
+  }
+
+  .login-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(200,255,0,0.08); }
+  .login-input.error { border-color: var(--accent2); animation: shake 0.3s ease; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  .login-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s;
+  }
+
+  .login-btn:hover { background: #d4ff33; transform: translateY(-1px); }
+  .login-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .login-error {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    margin-top: 12px;
+    text-align: center;
+    min-height: 16px;
+    letter-spacing: 1px;
+  }
+
+  /* ---- APP ---- */
+  #appScreen { display: none; }
+
+  .hero {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 40px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,255,0,0.05) 0%, transparent 70%);
+    top: -80px; right: -40px;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  h1 { font-size: clamp(32px, 5vw, 48px); font-weight: 800; letter-spacing: -2px; line-height: 1; }
+  h1 span { color: var(--accent); }
+
+  .logout-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .logout-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* WEEK NAV */
+  .week-nav-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+
+  .week-arrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 18px 12px;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .week-arrow:hover { color: var(--accent); }
+
+  .today-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    margin: 0 4px;
+  }
+
+  .today-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .today-btn.is-current { border-color: var(--accent); color: var(--accent); background: rgba(200,255,0,0.08); }
+
+  .week-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .week-label.current-week { color: var(--accent); }
+
+  .days-tabs { display: flex; flex: 1; overflow-x: auto; scrollbar-width: none; }
+  .days-tabs::-webkit-scrollbar { display: none; }
+
+  .day-tab {
+    flex-shrink: 0;
+    flex: 1;
+    padding: 14px 12px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    text-align: center;
+    min-width: 60px;
+  }
+
+  .day-tab:hover { background: rgba(200,255,0,0.04); }
+  .day-tab.active { border-bottom-color: var(--accent); }
+  .day-tab.is-today .day-name { color: var(--accent2); }
+
+  .day-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .day-tab.active .day-name { color: var(--accent); }
+  .day-date { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+  .day-tab.active .day-date { color: var(--accent); }
+
+  .day-dots { display: flex; gap: 2px; justify-content: center; margin-top: 4px; }
+  .day-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); }
+  .day-dot.filled { background: var(--accent2); }
+
+  /* MAIN */
+  .main { max-width: 900px; margin: 0 auto; padding: 32px 40px 80px; }
+
+  .week-overview {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .ov-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .ov-card:hover { border-color: #3a3a3a; }
+  .ov-card.active { border-color: var(--accent); }
+  .ov-card.is-today { border-color: var(--accent2); }
+
+  .ov-day { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .ov-num { font-size: 18px; font-weight: 800; }
+  .ov-bar-track { height: 3px; background: var(--border); border-radius: 999px; margin-top: 6px; overflow: hidden; }
+  .ov-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 999px; transition: width 0.4s ease; }
+
+  .day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .day-title { font-size: clamp(22px, 4vw, 34px); font-weight: 800; letter-spacing: -1px; }
+
+  .today-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--accent2);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 999px;
+    vertical-align: middle;
+    margin-left: 10px;
+  }
+
+  .progress-text { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent); }
+
+  .progress-bar-track { height: 5px; background: var(--border); border-radius: 999px; overflow: hidden; margin-bottom: 28px; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 999px; transition: width 0.5s cubic-bezier(.25,.8,.25,1); }
+
+  .categories { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+
+  .cat-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .cat-chip:hover { color: var(--text); border-color: #444; }
+  .cat-chip.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 700; }
+
+  .add-section { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+
+  .add-input {
+    flex: 1;
+    min-width: 180px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .add-input:focus { border-color: var(--accent); }
+  .add-input::placeholder { color: var(--muted); }
+
+  .cat-select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .cat-select option { background: var(--surface); }
+
+  .add-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 22px;
+    font-size: 22px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s;
+    line-height: 1;
+  }
+
+  .add-btn:hover { background: #d4ff33; transform: scale(1.05); }
+  .add-btn:active { transform: scale(0.95); }
+
+  .tasks-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .task-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.25s ease;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .task-item:hover { border-color: #3a3a3a; }
+  .task-item.done { background: var(--done-bg); border-color: #1e1e1e; }
+
+  .task-checkbox {
+    width: 24px; height: 24px;
+    border: 2px solid var(--border);
+    border-radius: 7px;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+
+  .task-checkbox:hover { border-color: var(--accent); }
+  .task-item.done .task-checkbox { background: var(--accent); border-color: var(--accent); color: #000; }
+
+  .task-body { flex: 1; min-width: 0; }
+  .task-text { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.4; }
+  .task-item.done .task-text { text-decoration: line-through; color: var(--muted); font-weight: 400; }
+
+  .task-cat {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .cat-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  .delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--border);
+    cursor: pointer;
+    font-size: 15px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .delete-btn:hover { color: var(--accent2); background: rgba(255,107,53,0.1); }
+
+  /* Loading & Toast */
+  .loading-spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--accent);
+    z-index: 999;
+    animation: toastIn 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+
+  @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: none;
+  }
+
+  .empty-state.visible { display: block; }
+  .empty-icon { font-size: 36px; margin-bottom: 12px; }
+
+  @media (max-width: 600px) {
+    .hero { padding: 28px 20px 22px; }
+    .main { padding: 20px 16px 60px; }
+    .week-overview { gap: 4px; }
+    .ov-num { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-eyebrow">Welcome back</div>
+    <div class="login-title">LIFE<br><span>PLAN.</span></div>
+    <div class="login-sub">Enter your password to continue</div>
+    <label class="login-label" for="pwInput">Password</label>
+    <input class="login-input" id="pwInput" type="password" placeholder="••••••••••" autocomplete="current-password">
+    <button class="login-btn" id="loginBtn">Enter →</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="appScreen">
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">Your week, your life</div>
+        <h1>WEEKLY<br><span>PLAN.</span></h1>
+      </div>
+      <button class="logout-btn" id="logoutBtn">← Logout</button>
+    </div>
+  </div>
+
+  <div class="week-nav-bar">
+    <button class="week-arrow" id="prevWeek">←</button>
+    <span class="week-label" id="weekLabel"></span>
+    <div class="days-tabs" id="daysTabs"></div>
+    <button class="today-btn" id="todayBtn">Today</button>
+    <button class="week-arrow" id="nextWeek">→</button>
+  </div>
+
+  <div class="main">
+    <div class="week-overview" id="weekOverview"></div>
+
+    <div class="day-header">
+      <div class="day-title" id="dayTitle"></div>
+      <div class="progress-text" id="progressText"></div>
+    </div>
+
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+
+    <div class="categories" id="catFilters"></div>
+
+    <div class="add-section">
+      <input class="add-input" id="taskInput" type="text" placeholder="What do you want to accomplish?" maxlength="140">
+      <select class="cat-select" id="catSelect"></select>
+      <button class="add-btn" id="addBtn">+</button>
+    </div>
+
+    <div class="tasks-list" id="tasksList"></div>
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">🌿</div>
+      No tasks here. Add something meaningful!
+    </div>
+  </div>
+</div>
+
+<script>
+  const CATS = [
+    { id: 'health',   label: 'Health',   emoji: '💪', color: '#4caf7d' },
+    { id: 'work',     label: 'Work',     emoji: '💼', color: '#5b8dee' },
+    { id: 'personal', label: 'Personal', emoji: '🌱', color: '#c8ff00' },
+    { id: 'family',   label: 'Family',   emoji: '🏠', color: '#e07b6a' },
+    { id: 'finance',  label: 'Finance',  emoji: '💰', color: '#9b6fcf' },
+    { id: 'learn',    label: 'Learning', emoji: '📚', color: '#3eb8c5' },
+    { id: 'social',   label: 'Social',   emoji: '🤝', color: '#ff6b35' },
+  ];
+
+  const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  let token = sessionStorage.getItem('wplanner_token') || '';
+  let weekOffset = 0;
+  let catFilter = 'all';
+  let allTasks = {}; // { 'YYYY-MM-DD': [...] }
+
+  const todayRaw = new Date();
+  todayRaw.setHours(0,0,0,0);
+
+  // ---- API ----
+  async function api(method, path, body) {
+    const res = await fetch(path, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    if (res.status === 401) { logout(); return null; }
+    return res.json();
+  }
+
+  // ---- AUTH ----
+  if (token) showApp();
+
+  document.getElementById('loginBtn').addEventListener('click', tryLogin);
+  document.getElementById('pwInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+  async function tryLogin() {
+    const pw = document.getElementById('pwInput').value;
+    const input = document.getElementById('pwInput');
+    const err = document.getElementById('loginError');
+    const btn = document.getElementById('loginBtn');
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-spinner"></span>Entering...';
+
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        token = data.token;
+        sessionStorage.setItem('wplanner_token', token);
+        showApp();
+      } else {
+        input.classList.add('error');
+        err.textContent = 'Wrong password. Try again.';
+        setTimeout(() => input.classList.remove('error'), 400);
+        input.value = '';
+        input.focus();
+      }
+    } catch {
+      err.textContent = 'Connection error. Is the server running?';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Enter →';
+    }
+  }
+
+  function showApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appScreen').style.display = 'block';
+    buildCatSelect();
+    attachEvents();
+    loadAndRender();
+  }
+
+  function logout() {
+    token = '';
+    sessionStorage.removeItem('wplanner_token');
+    document.getElementById('appScreen').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('loginError').textContent = '';
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', logout);
+
+  // ---- WEEK HELPERS ----
+  function getMonday(ref) {
+    const d = new Date(ref);
+    const day = d.getDay();
+    d.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
+    d.setHours(0,0,0,0);
+    return d;
+  }
+
+  function getWeekDates() {
+    const base = getMonday(todayRaw);
+    base.setDate(base.getDate() + weekOffset * 7);
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(base);
+      d.setDate(base.getDate() + i);
+      return d;
+    });
+  }
+
+  function isToday(d) {
+    const c = new Date(d); c.setHours(0,0,0,0);
+    return c.getTime() === todayRaw.getTime();
+  }
+
+  function dateKey(d) { return d.toISOString().split('T')[0]; }
+  function uid() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+
+  let selectedDay = (() => {
+    const week = getWeekDates();
+    return week.find(d => isToday(d)) || week[0];
+  })();
+
+  // ---- LOAD ----
+  async function loadAndRender() {
+    const week = getWeekDates();
+    const from = dateKey(week[0]);
+    const to = dateKey(week[6]);
+    const data = await api('GET', `/api/tasks?from=${from}&to=${to}`);
+    if (data) allTasks = { ...allTasks, ...data };
+    render();
+  }
+
+  // ---- EVENTS ----
+  function attachEvents() {
+    document.getElementById('addBtn').addEventListener('click', addTask);
+    document.getElementById('taskInput').addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+
+    document.getElementById('prevWeek').addEventListener('click', () => {
+      weekOffset--;
+      const week = getWeekDates();
+      selectedDay = week.find(d => isToday(d)) || week[0];
+      catFilter = 'all';
+      loadAndRender();
+    });
+
+    document.getElementById('todayBtn').addEventListener('click', () => {
+      weekOffset = 0;
+      selectedDay = todayRaw;
+      catFilter = 'all';
+      loadAndRender();
+    });
+
+    document.getElementById('nextWeek').addEventListener('click', () => {
+      weekOffset++;
+      const week = getWeekDates();
+      selectedDay = week.find(d => isToday(d)) || week[0];
+      catFilter = 'all';
+      loadAndRender();
+    });
+  }
+
+  function buildCatSelect() {
+    const sel = document.getElementById('catSelect');
+    sel.innerHTML = '';
+    CATS.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = `${c.emoji} ${c.label}`;
+      sel.appendChild(opt);
+    });
+  }
+
+  // ---- TASK ACTIONS ----
+  async function addTask() {
+    const input = document.getElementById('taskInput');
+    const cat = document.getElementById('catSelect').value;
+    const text = input.value.trim();
+    if (!text) { input.focus(); return; }
+
+    const task = { id: uid(), date_key: dateKey(selectedDay), text, cat, done: false };
+    // Optimistic update
+    if (!allTasks[task.date_key]) allTasks[task.date_key] = [];
+    allTasks[task.date_key].unshift(task);
+    input.value = '';
+    render();
+
+    await api('POST', '/api/tasks', task);
+    showToast('Task added ✓');
+  }
+
+  async function toggleTask(id) {
+    const key = dateKey(selectedDay);
+    const tasks = allTasks[key] || [];
+    const t = tasks.find(t => t.id === id);
+    if (!t) return;
+    t.done = !t.done;
+    render();
+    await api('PATCH', `/api/tasks/${id}`, { done: t.done });
+  }
+
+  async function deleteTask(id) {
+    const key = dateKey(selectedDay);
+    allTasks[key] = (allTasks[key] || []).filter(t => t.id !== id);
+    render();
+    await api('DELETE', `/api/tasks/${id}`);
+    showToast('Task deleted');
+  }
+
+  // ---- RENDER ----
+  function render() {
+    const weekDates = getWeekDates();
+    if (!weekDates.find(d => dateKey(d) === dateKey(selectedDay))) {
+      selectedDay = weekDates.find(d => isToday(d)) || weekDates[0];
+    }
+
+    // Week label
+    const first = weekDates[0], last = weekDates[6];
+    const fmt = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const wlEl = document.getElementById('weekLabel');
+    wlEl.textContent = `${fmt(first)} – ${fmt(last)}`;
+    wlEl.className = 'week-label' + (weekOffset === 0 ? ' current-week' : '');
+    document.getElementById('todayBtn').className = 'today-btn' + (weekOffset === 0 ? ' is-current' : '');
+
+    // Tabs
+    const tabs = document.getElementById('daysTabs');
+    tabs.innerHTML = '';
+    weekDates.forEach(d => {
+      const tasks = allTasks[dateKey(d)] || [];
+      const done = tasks.filter(t => t.done).length;
+      const tab = document.createElement('div');
+      tab.className = 'day-tab' + (dateKey(d) === dateKey(selectedDay) ? ' active' : '') + (isToday(d) ? ' is-today' : '');
+      const dots = Array.from({ length: Math.min(tasks.length, 5) }, (_, i) =>
+        `<div class="day-dot${i < done ? ' filled' : ''}"></div>`).join('');
+      tab.innerHTML = `<div class="day-name">${DAY_NAMES[d.getDay()]}</div><div class="day-date">${d.getDate()}</div><div class="day-dots">${dots}</div>`;
+      tab.addEventListener('click', () => { selectedDay = d; catFilter = 'all'; render(); });
+      tabs.appendChild(tab);
+    });
+
+    // Overview
+    const ov = document.getElementById('weekOverview');
+    ov.innerHTML = '';
+    weekDates.forEach(d => {
+      const tasks = allTasks[dateKey(d)] || [];
+      const pct = tasks.length ? (tasks.filter(t => t.done).length / tasks.length) * 100 : 0;
+      const card = document.createElement('div');
+      card.className = 'ov-card' + (dateKey(d) === dateKey(selectedDay) ? ' active' : '') + (isToday(d) ? ' is-today' : '');
+      card.innerHTML = `<div class="ov-day">${DAY_NAMES[d.getDay()]}</div><div class="ov-num">${d.getDate()}</div><div class="ov-bar-track"><div class="ov-bar-fill" style="width:${pct}%"></div></div>`;
+      card.addEventListener('click', () => { selectedDay = d; catFilter = 'all'; render(); });
+      ov.appendChild(card);
+    });
+
+    // Cat filters
+    const cf = document.getElementById('catFilters');
+    cf.innerHTML = '';
+    const allBtn = document.createElement('button');
+    allBtn.className = 'cat-chip' + (catFilter === 'all' ? ' active' : '');
+    allBtn.textContent = 'All';
+    allBtn.addEventListener('click', () => { catFilter = 'all'; render(); });
+    cf.appendChild(allBtn);
+    CATS.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'cat-chip' + (catFilter === c.id ? ' active' : '');
+      btn.textContent = `${c.emoji} ${c.label}`;
+      btn.addEventListener('click', () => { catFilter = c.id; render(); });
+      cf.appendChild(btn);
+    });
+
+    // Day title
+    const dt = document.getElementById('dayTitle');
+    dt.innerHTML = selectedDay.toLocaleDateString('en-US', { weekday: 'long' }) + ', ' +
+      selectedDay.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) +
+      (isToday(selectedDay) ? '<span class="today-badge">Today</span>' : '');
+
+    // Progress
+    const dayTasks = allTasks[dateKey(selectedDay)] || [];
+    const total = dayTasks.length;
+    const done = dayTasks.filter(t => t.done).length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = total ? `${done} / ${total} done · ${pct}%` : 'No tasks yet';
+
+    // Tasks list
+    const list = document.getElementById('tasksList');
+    const empty = document.getElementById('emptyState');
+    list.innerHTML = '';
+    const filtered = catFilter === 'all' ? dayTasks : dayTasks.filter(t => t.cat === catFilter);
+    empty.classList.toggle('visible', filtered.length === 0);
+
+    filtered.forEach(task => {
+      const cat = CATS.find(c => c.id === task.cat) || CATS[0];
+      const item = document.createElement('div');
+      item.className = 'task-item' + (task.done ? ' done' : '');
+      item.innerHTML = `
+        <div class="task-checkbox" data-id="${task.id}">${task.done ? '✓' : ''}</div>
+        <div class="task-body">
+          <div class="task-text">${escHtml(task.text)}</div>
+          <div class="task-cat" style="color:${cat.color}"><span class="cat-dot" style="background:${cat.color}"></span>${cat.emoji} ${cat.label}</div>
+        </div>
+        <button class="delete-btn" data-id="${task.id}">✕</button>
+      `;
+      list.appendChild(item);
+    });
+
+    list.querySelectorAll('.task-checkbox').forEach(el =>
+      el.addEventListener('click', () => toggleTask(el.dataset.id)));
+    list.querySelectorAll('.delete-btn').forEach(el =>
+      el.addEventListener('click', () => deleteTask(el.dataset.id)));
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+  }
+</script>
+</body>
+</html>
